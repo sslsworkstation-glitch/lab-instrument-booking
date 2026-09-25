@@ -6,30 +6,53 @@ let bookings = [];
 
 document.addEventListener("DOMContentLoaded", init);
 
-async function init() {
-  if (!API || API.includes("PASTE_")) {
-    showGlobalError("Please configure the Apps Script Web App URL in index.html.");
-    return;
+async function getJson(query) {
+  const res = await fetch(API + query, {
+    cache: "no-store"
+  });
+
+  const text = await res.text();
+
+  if (!res.ok) {
+    throw new Error(
+      "Server error (" + res.status + "): " + text.substring(0, 300)
+    );
   }
 
-  $("weekDate").value = toDateInput(new Date());
-  $("date").value = toDateInput(new Date());
+  try {
+    return JSON.parse(text);
+  } catch (e) {
+    throw new Error(
+      "The Apps Script returned HTML instead of JSON. " +
+      "Check the Web App deployment and access settings."
+    );
+  }
+}
+
+async function postJson(payload) {
+  const res = await fetch(API, {
+    method: "POST",
+    headers: {
+      "Content-Type": "text/plain;charset=utf-8"
+    },
+    body: JSON.stringify(payload)
+  });
+
+  const text = await res.text();
+
+  if (!res.ok) {
+    throw new Error(
+      "Server error (" + res.status + "): " + text.substring(0, 300)
+    );
+  }
 
   try {
-    config = await getJson("?action=config");
-    if (!config.ok) throw new Error(config.error);
-
-    $("siteTitle").textContent = config.institution;
-    populateInstruments();
-
-    $("instrumentSelect").addEventListener("change", onInstrumentChange);
-    $("weekDate").addEventListener("change", renderCalendar);
-    $("refreshBtn").addEventListener("click", renderCalendar);
-    $("bookingForm").addEventListener("submit", submitBooking);
-
-    onInstrumentChange();
+    return JSON.parse(text);
   } catch (e) {
-    showGlobalError(e.message);
+    throw new Error(
+      "The Apps Script returned HTML instead of JSON. " +
+      "Check the Web App deployment and access settings."
+    );
   }
 }
 
