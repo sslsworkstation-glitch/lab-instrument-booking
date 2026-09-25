@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Lab Instrument Booking</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="site-header">
+  <div>
+    <div class="eyebrow">LABORATORY</div>
+    <h1 id="siteTitle">Instrument Booking</h1>
+  </div>
+</header>
+
+<main class="container">
+  <section class="toolbar card">
+    <label>
+      Instrument
+      <select id="instrumentSelect"></select>
+    </label>
+    <label>
+      Week
+      <input type="date" id="weekDate">
+    </label>
+    <button id="refreshBtn" class="secondary">Refresh</button>
+  </section>
+
+  <section class="card">
+    <div class="instrument-head">
+      <div>
+        <h2 id="instrumentName">Loading…</h2>
+        <p id="instrumentMeta"></p>
+      </div>
+      <span id="statusBadge" class="badge">—</span>
+    </div>
+    <div id="calendar" class="calendar"></div>
+    <div class="legend">
+      <span><i class="dot available"></i> Available</span>
+      <span><i class="dot booked"></i> Booked</span>
+      <span><i class="dot maintenance"></i> Maintenance</span>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Book this instrument</h2>
+    <form id="bookingForm">
+      <input type="hidden" id="bookingInstrument">
+      <div class="form-grid">
+        <label>Name *
+          <input id="name" required maxlength="100">
+        </label>
+        <label>Email *
+          <input id="email" type="email" required maxlength="200">
+        </label>
+        <label>Date *
+          <input id="date" type="date" required>
+        </label>
+        <label>Start *
+          <input id="startTime" type="time" required value="09:00">
+        </label>
+        <label>End *
+          <input id="endTime" type="time" required value="10:00">
+        </label>
+      </div>
+      <label>Purpose *
+        <textarea id="purpose" required maxlength="500" rows="3"
+          placeholder="Brief description of the planned use"></textarea>
+      </label>
+      <button class="primary" type="submit">Confirm booking</button>
+      <div id="formMessage" class="message" aria-live="polite"></div>
+    </form>
+  </section>
+</main>
+
+<footer>
+  <span>Laboratory Instrument Booking</span>
+</footer>
+
+<script>
+  // Replace with your deployed Apps Script Web App URL.
+  window.BOOKING_API = "https://script.google.com/macros/s/AKfycbxMjpLgGIOrPXaUbzqBGElsD2ejYHfHmNfnb_wP0U3bR9pvcAy6_UKhY-JDwC5SGhxi/exec";
+</script>
+<script src="app.js"></script>
+
+<!-- Google Calendar Appointment Scheduling begin -->
+<link href="https://calendar.google.com/calendar/scheduling-button-script.css" rel="stylesheet">
+<script src="https://calendar.google.com/calendar/scheduling-button-script.js" async></script>
+<script>
+(function() {
+  var target = document.currentScript;
+  window.addEventListener('load', function() {
+    calendar.schedulingButton.load({
+      url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ2uyvutNpZmqCuiHY5AsvXjXDdSYwUwv6OmvFUWN4SBSEjwLMl9CipkrAbBf4qoYcmfxApRWApw?gv=true',
+      color: '#039BE5',
+      label: 'Book an appointment',
+      target,
+    });
+  });
+})();
+</script>
+<!-- Google Calendar Appointment Scheduling end -->
+</body>
+</html>
